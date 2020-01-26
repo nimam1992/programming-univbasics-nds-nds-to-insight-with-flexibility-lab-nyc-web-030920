@@ -1,6 +1,7 @@
 # Provided, don't edit
-require 'directors_database'
+require_relative 'directors_database'
 
+directors_database
 # A method we're giving you. This "flattens"  Arrays of Arrays so: [[1,2],
 # [3,4,5], [6]] => [1,2,3,4,5,6].
 
@@ -21,7 +22,7 @@ def flatten_a_o_a(aoa)
 end
 
 def movie_with_director_name(director_name, movie_data)
-  { 
+  {
     :title => movie_data[:title],
     :worldwide_gross => movie_data[:worldwide_gross],
     :release_year => movie_data[:release_year],
@@ -30,10 +31,19 @@ def movie_with_director_name(director_name, movie_data)
   }
 end
 
-
 # Your code after this point
 
 def movies_with_director_key(name, movies_collection)
+  collection = []
+  movie_key = movies_collection[0]
+  movie = movie_with_director_name(name,movie_key)
+  movie_index = 0
+  while movie_index < movie.length do
+    collection << {:director_name=>name}
+    movie_index+=1
+  end
+  collection
+
   # GOAL: For each Hash in an Array (movies_collection), provide a collection
   # of movies and a directors name to the movie_with_director_name method
   # and accumulate the returned Array of movies into a new Array that's
@@ -52,6 +62,28 @@ end
 
 
 def gross_per_studio(collection)
+
+  index = 0
+  movie_table = []
+  while index < collection.length
+    table = collection[index]
+    data = movie_with_director_name('director',table)
+    movie_table << data
+    index+=1
+    end
+    movie_table
+
+  result = {}
+  i=0
+  while i<movie_table.length do
+    studio = movie_table[i][:studio]
+    if !result[studio]
+      result[studio] = movie_table[i][:worldwide_gross]
+    else
+      result[studio] += movie_table[i][:worldwide_gross]
+    end
+    i+=1
+  end
   # GOAL: Given an Array of Hashes where each Hash represents a movie,
   # return a Hash that includes the total worldwide_gross of all the movies from
   # each studio.
@@ -63,11 +95,29 @@ def gross_per_studio(collection)
   #
   # Hash whose keys are the studio names and whose values are the sum
   # total of all the worldwide_gross numbers for every movie in the input Hash
+    result
 end
 
-def movies_with_directors_set(source)
+def movies_with_directors_set(x)
+  directors_database
+  y = directors_database
+  dir_array = []
+  director_index = 0
+  while director_index < x.length do
+  director = x[director_index][:name]
+  movie_index = 0
+  while movie_index < x[director_index][:movies].length do
+  movie = x[director_index][:movies][movie_index][:title]
+  gross = y[director_index][:movies][movie_index][:worldwide_gross]
+  studio = y[director_index][:movies][movie_index][:studio]
+    dir_array << [{:title => movie, :director_name => director, :worldwide_gross => gross, :studio => studio}]
+    movie_index+=1
+  end
+  director_index+=1
+end
+ dir_array
   # GOAL: For each director, find their :movies Array and stick it in a new Array
-  #
+  # source
   # INPUT:
   # * source: An Array of Hashes containing director information including
   # :name and :movies
@@ -87,3 +137,5 @@ def studios_totals(nds)
   movies_with_director_names = flatten_a_o_a(a_o_a_movies_with_director_names)
   return gross_per_studio(movies_with_director_names)
 end
+
+pp directors_database
