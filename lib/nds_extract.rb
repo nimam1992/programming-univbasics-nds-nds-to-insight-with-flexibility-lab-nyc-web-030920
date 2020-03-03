@@ -64,9 +64,8 @@ def movies_with_directors_set(x)
   movies_list = []
   while i < x.length do
     j = 0
-          binding.pry
     while j < x[i][:movies].length
-      movies_list << {:title => x[i][:movies][j][:title],:director_name => x[i][:name]}
+      movies_list << [movies_with_director_name(x[i][:name],x[i][:movies][j])]
       j+=1
     end
     i+=1
