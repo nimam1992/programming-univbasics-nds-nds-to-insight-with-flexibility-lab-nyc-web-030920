@@ -65,7 +65,7 @@ def movies_with_directors_set(x)
   while i < x.length do
     j = 0
     while j < x[i][:movies].length
-      movies_list << [movies_with_director_name(x[i][:name],x[i][:movies][j])]
+      movies_list << [movie_with_director_name(x[i][:name],x[i][:movies][j])]
       j+=1
     end
     i+=1
